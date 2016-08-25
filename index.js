@@ -8,36 +8,48 @@ function run(bytecode) {
 	const hl = inputLen >> 1
 	var code = new Array(hl)
 	for (var i = 0; i < hl; i++) {
-		code[i] = parseInt(bytecode.substr(i * 2, 2), 16)
+		code[i] = bytecode.substr(i * 2, 2)
 	}
-  
+  console.log(code)
   const codeSize = code.length
   var stack = []
 	// program counter for next instruction
 	var pc = -1
-
 	// step through the op stack
-	while (++pc < codeSize) {
 
+	while (++pc < codeSize) {
+		console.log('------------')
 		switch (code[pc]) {
-			// add operation
-			case 1:
-			  var num = (code[++pc] << 24 ) | (code[++pc] << 16) | (code[++pc] << 8) | code[++pc]
+			// push operation
+			case '60':
+			  var num = parseInt(code[pc + 1], 16)
 			  stack.push(num)
-			  console.log('PUSH: ' + num)
+			  console.log('OPCODE_PUSH: ' + num)
+			  console.log('PC: ' + pc)
+			  pc++
+			  console.log(pc)
 			  break
-			case 2:
+			// add op
+			case '01':
 			  if (stack.length < 2)
 			  	throw new Error('stack underflow')
 			  const a = stack.pop(), b = stack.pop()
 			  const sum = a + b
 			  stack.push(sum)
-			  console.log('ADD: %d + %d = %d', a, b, sum)
+			  console.log('OPCODE_ADD: %d + %d = %d', a, b, sum)
+        console.log('PC: ' + pc)
+			  break
+			case '50':
+			  if(stack.length < 1)
+			  	throw new Error('stack underflow')
+			  stack.pop()
+			  console.log('OPCODE_POP:')
+			  console.log('PC: ' + pc)
 			  break
 			default:
 			  throw new Error('bad instruction')
 		}
-		console.log('Stack: ' + stack)
+		console.log('Stack:', stack)
 	}
 	console.log('done')
 }
