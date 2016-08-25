@@ -13,10 +13,12 @@ function run(bytecode) {
   console.log(code)
   const codeSize = code.length
   var stack = []
+  var memory = []
 	// program counter for next instruction
 	var pc = -1
 	// step through the op stack
 
+  // 6005600A0150602060405260205100
 	while (++pc < codeSize) {
 		console.log('------------')
 		switch (code[pc]) {
@@ -27,7 +29,6 @@ function run(bytecode) {
 			  console.log('OPCODE_PUSH: ' + num)
 			  console.log('PC: ' + pc)
 			  pc++
-			  console.log(pc)
 			  break
 			// add op
 			case '01':
@@ -46,10 +47,28 @@ function run(bytecode) {
 			  console.log('OPCODE_POP:')
 			  console.log('PC: ' + pc)
 			  break
+			// Memory loader, (offset, data)
+			case '52':
+			  const d = stack.pop(), o = stack.pop()
+			  memory[o] = d
+			  console.log('OPCODE_MSTORE')
+			  console.log('PC: ' + pc)
+			  break
+			case '51':
+			  const l = stack.pop()
+			  stack.push(memory[l])
+			  console.log('OPCODE_MLOAD')
+			  console.log('PC: ' + pc)			  
+			  break
+			case '00':
+			  console.log('OPCODE_STOP:')
+        console.log('PC: ' + pc)
+        return
 			default:
 			  throw new Error('bad instruction')
 		}
 		console.log('Stack:', stack)
+		console.log('Memory:', memory)
 	}
 	console.log('done')
 }
