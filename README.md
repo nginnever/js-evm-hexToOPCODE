@@ -9,7 +9,7 @@ input: 6005600A015000
 
 output:
 
-``
+```
 ------------
 OPCODE_PUSH: 5
 PC: 0
@@ -30,4 +30,4 @@ Stack: []
 OPCODE_STOP:
 PC: 6
 ------------
-``
+```
