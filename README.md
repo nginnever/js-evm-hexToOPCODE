@@ -1,4 +1,4 @@
-# js-evm-hexToOPCODE.
+# js-evm-hexToOPCODE..
 a js module to assemble evm byte code into instructions
 
 example
